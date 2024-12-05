@@ -1,10 +1,36 @@
 import { data } from "./data";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Footer from "./Footer";
 
-function JobCart() {
- const [filterjob, setFilter] = useState(data);
+function JobCart({setFilter,filterjob}) {
+//  const [filterjob, setFilter] = useState(data);
   const [searchInput, setSearchInput] = useState("");
-  const [locationInput, setLocationInput] = useState("");
+    const [locationInput, setLocationInput] = useState("");
+    function saveToLocalStorageArray(i, data) {
+       const key="jobs"
+     try {
+    
+       let existingData = JSON.parse(localStorage.getItem(key)) || [];
+
+     
+       if (!Array.isArray(existingData)) {
+         existingData = [];
+       }
+       existingData.push(data);
+
+       
+         localStorage.setItem(key, JSON.stringify(existingData));
+         alert("Job saved")
+      
+     } catch (error) {
+       console.error("Error saving array to localStorage:", error);
+     }
+   }
+    useEffect(() => {
+    
+},[filterjob])
+   
+
 
   const handleFilter = () => {
     const filteredData = data.filter(
@@ -69,11 +95,17 @@ function JobCart() {
                   <h1 className="text-gray-600">{item.location}</h1>
                 </div>
               </div>
-              <img src={item.saved} className="w-5 h-5"></img>
+              <img
+                        src={item.saved}
+                        className="w-5 h-5"
+                        onClick={() => saveToLocalStorageArray(i, item)}
+              ></img>
             </div>
           </div>
         ))}
-      </div>
+                
+          </div>
+        
     </div>
   );
 }
